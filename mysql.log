@@ -1,0 +1,232 @@
+/usr/local/Cellar/mysql/8.1.0/bin/mysqld, Version: 8.1.0 (Homebrew). started with:
+Tcp port: 3306  Unix socket: /tmp/mysql.sock
+Time                 Id Command    Argument
+2023-10-12T23:08:38.219666Z	   11 Query	CREATE TABLE USERS (
+	UserId INT  AUTO_INCREMENT,
+	Username TEXT,
+	Email TEXT,
+	Password TEXT,
+	DateJoined TIMESTAMP,
+	PRIMARY KEY(UserId)
+)
+2023-10-12T23:08:38.220448Z	   11 Query	CREATE TABLE PLAYERS(
+    UserId INT,
+    League TEXT,
+    FOREIGN KEY(UserID)REFERENCES USERS(UserId)
+)
+2023-10-12T23:08:38.221038Z	   11 Query	CREATE TABLE CREATORS(
+    UserId INT,
+    FOREIGN KEY(UserID)REFERENCES USERS(UserId)
+)
+2023-10-12T23:08:38.221846Z	   11 Query	CREATE TABLE CARDS (
+   	CardId INT  AUTO_INCREMENT,
+    BackText TEXT,
+	PRIMARY KEY(CardId)
+)
+2023-10-12T23:08:38.222416Z	   11 Query	CREATE TABLE PHOTO_CARDS (
+   	CardId INT  AUTO_INCREMENT,
+	FrontImage TEXT,
+	BackText TEXT,
+	FOREIGN KEY(CardId) REFERENCES CARDS(CardId)
+)
+2023-10-12T23:08:38.222906Z	   11 Query	CREATE TABLE TEXT_CARDS (
+   	CardId INT  AUTO_INCREMENT,
+	FrontText TEXT,
+	BackText TEXT,
+	FOREIGN KEY(CardId) REFERENCES CARDS(CardId)
+)
+2023-10-12T23:08:38.223364Z	   11 Query	CREATE TABLE LEADERBOARDS (
+    LeaderboardId INT  AUTO_INCREMENT,
+    CompetitionId INT,
+    PRIMARY KEY (LeaderboardId)
+)
+2023-10-12T23:08:38.223659Z	   11 Query	CREATE TABLE COMPETITIONS (
+	CompetitionId INT,
+	LeaderboardId INT,
+	CompetitionType TEXT,
+	PRIMARY KEY(CompetitionId)
+)
+2023-10-12T23:08:38.223970Z	   11 Query	CREATE TABLE TIME_COMPETITIONS (
+	CompetitionId INT,
+	LeaderboardId INT,
+    StartTime TIMESTAMP,
+	FOREIGN KEY(CompetitionId) REFERENCES COMPETITIONS(CompetitionId),
+    FOREIGN KEY(LeaderboardId) REFERENCES LEADERBOARDS(LeaderboardId)
+)
+2023-10-12T23:08:38.224336Z	   11 Query	CREATE TABLE SCORE_COMPETITIONS (
+	CompetitionId INT,
+	LeaderboardId INT,
+	FOREIGN KEY(CompetitionId) REFERENCES COMPETITIONS(CompetitionId),
+	FOREIGN KEY(LeaderboardId) REFERENCES LEADERBOARDS(LeaderboardId)
+)
+2023-10-12T23:08:38.224700Z	   11 Query	CREATE TABLE CARDSETS (
+	CardsetId INT AUTO_INCREMENT PRIMARY KEY
+)
+2023-10-12T23:08:38.225060Z	   11 Query	CREATE TABLE CARDSETS_CARDS (
+    CardsetId INT,
+    CardId INT,
+    FOREIGN KEY (CardsetId) REFERENCES CARDSETS(CardsetId),
+    FOREIGN KEY (CardId) REFERENCES CARDS(CardId)
+)
+2023-10-12T23:08:38.225433Z	   11 Query	CREATE TABLE CARDSETS_USERS (
+    CardsetId INT,
+    UserId INT,
+    FOREIGN KEY (CardsetId) REFERENCES CARDSETS(CardsetId),
+    FOREIGN KEY (UserId) REFERENCES USERS(UserId)
+)
+2023-10-12T23:08:38.225790Z	   11 Query	CREATE TABLE SCORE_LEADERBOARDS (
+LeaderboardId INT,
+	UserId INT,
+	Score INT,
+	Place INT,
+	FOREIGN KEY (UserId) REFERENCES USERS(UserId),
+	FOREIGN KEY (LeaderboardId) REFERENCES LEADERBOARDS(LeaderboardId)
+
+)
+2023-10-12T23:08:38.226189Z	   11 Query	CREATE TABLE TIME_LEADERBOARDS (
+	LeaderboardId INT,
+	UserId INT,
+	Time INT,
+	Place INT,
+	FOREIGN KEY (UserId) REFERENCES USERS(UserId),
+	FOREIGN KEY (LeaderboardId) REFERENCES LEADERBOARDS(LeaderboardId)
+)
+2023-10-12T23:08:38.226585Z	   11 Query	CREATE TABLE USERS_COMPETITIONS(
+    CompetitionId INT,
+    UserId INT,
+    FOREIGN KEY (CompetitionId) REFERENCES COMPETITIONS(CompetitionId),
+    FOREIGN KEY (UserId) REFERENCES USERS(UserId)
+)
+2023-10-12T23:08:38.226973Z	   11 Query	INSERT INTO USERS (Username, Email, Password, DateJoined)
+VALUES ('User1', 'user1@example.com', 'password1', NOW())
+2023-10-12T23:08:38.228914Z	   11 Query	INSERT INTO USERS (Username, Email, Password, DateJoined)
+VALUES ('User2', 'user2@example.com', 'password2', NOW())
+2023-10-12T23:08:38.230742Z	   11 Query	INSERT INTO USERS (Username, Email, Password, DateJoined)
+VALUES ('User3', 'user3@example.com', 'password3', NOW())
+2023-10-12T23:08:38.232089Z	   11 Query	INSERT INTO CREATORS (UserId)
+VALUES (3)
+2023-10-12T23:08:38.232965Z	   11 Query	INSERT INTO PLAYERS (UserId, League)
+VALUES (1, "a")
+2023-10-12T23:08:38.233873Z	   11 Query	INSERT INTO PLAYERS (UserId, League)
+VALUES (2, "b")
+2023-10-12T23:08:38.246265Z	   11 Query	INSERT INTO CARDS (BackText)
+VALUES ('Random Card 1 Back Text')
+2023-10-12T23:08:38.247429Z	   11 Query	INSERT INTO CARDS (BackText)
+VALUES ('Random Card 2 Back Text')
+2023-10-12T23:08:38.248229Z	   11 Query	INSERT INTO CARDS (BackText)
+VALUES ('Random Card 3 Back Text')
+2023-10-12T23:08:38.248932Z	   11 Query	INSERT INTO CARDS (BackText)
+VALUES ('Random Card 4 Back Text')
+2023-10-12T23:08:38.249735Z	   11 Query	INSERT INTO CARDS (BackText)
+VALUES ('Random Card 5 Back Text')
+2023-10-12T23:08:38.250488Z	   11 Query	INSERT INTO TEXT_CARDS (CardId, FrontText, BackText)
+VALUES (1, 'Front Text for Text Card 1', 'Back Text for Text Card 1')
+2023-10-12T23:08:38.251236Z	   11 Query	INSERT INTO TEXT_CARDS (CardId, FrontText, BackText)
+VALUES (2, 'Front Text for Text Card 2', 'Back Text for Text Card 2')
+2023-10-12T23:08:38.251913Z	   11 Query	INSERT INTO TEXT_CARDS (CardId, FrontText, BackText)
+VALUES (3, 'Front Text for Text Card 3', 'Back Text for Text Card 3')
+2023-10-12T23:08:38.252541Z	   11 Query	INSERT INTO PHOTO_CARDS (CardId, FrontImage, BackText)
+VALUES (4, 'FrontImage1.jpg', 'Back Text for Photo Card 4')
+2023-10-12T23:08:38.253172Z	   11 Query	INSERT INTO PHOTO_CARDS (CardId, FrontImage, BackText)
+VALUES (5, 'FrontImage2.jpg', 'Back Text for Photo Card 5')
+2023-10-12T23:08:38.254061Z	   11 Query	INSERT INTO LEADERBOARDS (CompetitionId)
+VALUES (1)
+2023-10-12T23:08:38.254808Z	   11 Query	INSERT INTO LEADERBOARDS (CompetitionId)
+VALUES (2)
+2023-10-12T23:08:38.255375Z	   11 Query	INSERT INTO TIME_LEADERBOARDS (LeaderboardId, UserId, Time, Place)
+VALUES (2, 1, 5, 2)
+2023-10-12T23:08:38.256084Z	   11 Query	INSERT INTO TIME_LEADERBOARDS (LeaderboardId, UserId, Time, Place)
+VALUES (2, 2, 4, 1)
+2023-10-12T23:08:38.256611Z	   11 Query	INSERT INTO SCORE_LEADERBOARDS (LeaderboardId, UserId, Score, Place)
+VALUES (1, 1, 5, 1)
+2023-10-12T23:08:38.257381Z	   11 Query	INSERT INTO SCORE_LEADERBOARDS (LeaderboardId, UserId, Score, Place)
+VALUES (1, 2, 4, 2)
+2023-10-12T23:08:38.257979Z	   11 Query	INSERT INTO COMPETITIONS (LeaderboardId, CompetitionType)
+VALUES (1, 'SCORE')
+2023-10-12T23:08:38.258099Z	   11 Query	INSERT INTO COMPETITIONS (LeaderboardId, CompetitionType)
+VALUES (2, 'TIME')
+2023-10-12T23:08:38.258212Z	   11 Query	INSERT INTO SCORE_COMPETITIONS (CompetitionId, LeaderboardId)
+VALUES (1, 1)
+2023-10-12T23:08:38.259053Z	   11 Query	INSERT INTO TIME_COMPETITIONS (CompetitionId, LeaderboardId, StartTime)
+VALUES (2, 2, '2023-10-06 12:00:00')
+2023-10-12T23:08:38.259544Z	   11 Query	INSERT INTO CARDSETS (CardsetId)
+VALUES (1)
+2023-10-12T23:08:38.259684Z	   11 Query	INSERT INTO CARDSETS_USERS (CardsetId, UserId)
+VALUES (1, 3)
+2023-10-12T23:08:38.260183Z	   11 Query	INSERT INTO CARDSETS_CARDS (CardsetId, CardId)
+VALUES (1, 1)
+2023-10-12T23:08:38.260672Z	   11 Query	INSERT INTO CARDSETS_CARDS (CardsetId, CardId)
+VALUES (1, 2)
+2023-10-12T23:08:38.261076Z	   11 Query	INSERT INTO CARDSETS_CARDS (CardsetId, CardId)
+VALUES (1, 3)
+2023-10-12T23:08:38.261440Z	   11 Query	INSERT INTO CARDSETS_CARDS (CardsetId, CardId)
+VALUES (1, 4)
+2023-10-12T23:08:38.261942Z	   11 Query	INSERT INTO CARDSETS_CARDS (CardsetId, CardId)
+VALUES (1, 5)
+2023-10-12T23:08:38.262344Z	   11 Query	INSERT INTO USERS_COMPETITIONS (CompetitionId, UserId)
+VALUES (1, 1)
+2023-10-12T23:08:38.262824Z	   11 Query	INSERT INTO USERS_COMPETITIONS (CompetitionId, UserId)
+VALUES (1, 2)
+2023-10-12T23:08:38.263250Z	   11 Query	INSERT INTO USERS_COMPETITIONS (CompetitionId, UserId)
+VALUES (2, 1)
+2023-10-12T23:08:38.263647Z	   11 Query	INSERT INTO USERS_COMPETITIONS (CompetitionId, UserId)
+VALUES (2, 2)
+2023-10-12T23:08:38.264018Z	   11 Query	-- Query 1: Find the top 10 users with the highest scores in a specific competition.
+2023-10-12T23:08:38.264109Z	   11 Query	SELECT U.Username, SL.Score
+FROM SCORE_LEADERBOARDS SL
+JOIN USERS U ON SL.UserId = U.UserId
+WHERE SL.LeaderboardId = @LeaderboardId
+ORDER BY SL.Score DESC
+LIMIT 10
+2023-10-12T23:08:38.264251Z	   11 Query	-- Query 2: Calculate the average score for all users in a specific competition.
+2023-10-12T23:08:38.264328Z	   11 Query	SELECT AVG(SL.Score) AS AverageScore
+FROM SCORE_LEADERBOARDS SL
+WHERE SL.LeaderboardId = @LeaderboardId
+2023-10-12T23:08:38.264486Z	   11 Query	-- Query 3: Find creator of cardset
+2023-10-12T23:08:38.264597Z	   11 Query	SELECT DISTINCT CU.UserId
+FROM CARDSETS_USERS CU
+WHERE CU.CardsetId = @CardsetId
+2023-10-12T23:08:38.264709Z	   11 Query	-- Query 4: Find the total number of players in each league.
+2023-10-12T23:08:38.264786Z	   11 Query	SELECT P.League, COUNT(*) AS PlayerCount
+FROM PLAYERS P
+GROUP BY P.League
+2023-10-12T23:08:38.264992Z	   11 Query	-- Query 5: Select all competitions for user
+2023-10-12T23:08:38.265069Z	   11 Query	SELECT UC.CompetitionId
+FROM USERS_COMPETITIONS UC
+WHERE UC.UserId = @UserId
+2023-10-12T23:08:38.265159Z	   11 Query	-- Query 6: Select list of cards in cardset
+2023-10-12T23:08:38.265228Z	   11 Query	SELECT CC.CardId
+FROM CARDSETS_CARDS CC
+WHERE CC.CardsetId = @CardsetId
+2023-10-12T23:08:38.265312Z	   11 Query	-- Query 7: List the card sets that have the most cards in them.
+2023-10-12T23:08:38.265386Z	   11 Query	SELECT CS.CardsetId, COUNT(*) AS CardCount
+FROM CARDSETS_CARDS CS
+GROUP BY CS.CardsetId
+ORDER BY CardCount DESC
+LIMIT 1
+2023-10-12T23:08:38.265563Z	   11 Query	-- Query 8: Calculate the average time taken by users in time-based competitions.
+2023-10-12T23:08:38.265631Z	   11 Query	SELECT AVG(TL.Time) AS AverageTime
+FROM TIME_LEADERBOARDS TL
+JOIN USERS U ON TL.UserId = U.UserId
+WHERE TL.LeaderboardId = @LeaderboardId
+2023-10-12T23:08:38.265736Z	   11 Query	-- Query 9: Show cardsets id which creators have created.
+2023-10-12T23:08:38.265797Z	   11 Query	SELECT CREATORS.UserId AS CreatorID, CARDSETS_USERS.CardSetID
+FROM CREATORS
+JOIN CARDSETS_USERS ON CREATORS.UserId = CARDSETS_USERS.UserID
+2023-10-12T23:08:38.265982Z	   11 Query	-- Query 10: List top 5 biggest competitions
+2023-10-12T23:08:38.266105Z	   11 Query	SELECT C.CompetitionId, C.CompetitionType, COUNT(UC.UserId) AS ParticipantCount
+FROM COMPETITIONS C
+JOIN USERS_COMPETITIONS UC ON C.CompetitionId = UC.CompetitionId
+GROUP BY C.CompetitionId, C.CompetitionType
+ORDER BY ParticipantCount DESC
+LIMIT 5
+2023-10-12T23:08:38.266301Z	   11 Query	-- Query 11: Calculate the total number of cards created by each user.
+2023-10-12T23:08:38.266399Z	   11 Query	SELECT U.UserId, U.Username, COUNT(*) AS TotalCardsCreated
+FROM CREATORS C
+JOIN USERS U ON C.UserId = U.UserId
+GROUP BY U.UserId, U.Username
+2023-10-12T23:08:38.266608Z	   11 Query	-- Query 12: Find the users who have participated in all competitions.
+2023-10-12T23:08:38.299713Z	   11 Query	SELECT U.UserId, U.Username, COUNT(UC.CompetitionId) AS NumberOfCompetitions
+FROM USERS U
+LEFT JOIN USERS_COMPETITIONS UC ON U.UserId = UC.UserId
+GROUP BY U.UserId, U.Username
