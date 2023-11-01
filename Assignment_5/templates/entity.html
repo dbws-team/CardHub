@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/logo.svg') }}">
+    <title>Entity input</title>
+</head>
+<body>
+<!--<h2>Already exist:</h2>-->
+<!--{% for id_field in existed %}-->
+<!--<p>{{id_field}}</p>-->
+<!--{% endfor %}-->
+<h2>Input data: </h2>
+
+<form action="http://127.0.0.1:5000/maintenance/{{ entity_name }}/submit" method="post">
+    {% for name in fields %}
+    <label for="{{ name }}">{{ name }}:</label>
+    <input type="text" id="{{ name }}" name="{{ name }}"><br><br>
+    {% endfor %}
+    <h3>Relations with: </h3>
+     {% for name2 in select_fields %}
+        <label for="{{ name2 }}">{{ name2 }}:</label>
+        <select id="{{ name2 }}" name="{{ name2 }}">
+            {% for relation in existed_relations[name2] %}
+                <option value="{{ relation }}">{{ relation }}</option>
+            {% endfor %}
+        </select>
+    {% endfor %}
+    <input type="submit" value="Submit">
+
+</form>
+
+<br><br>
+<a href="/maintenance"> Back </a>
+</body>
+</html>
