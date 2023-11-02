@@ -198,3 +198,6 @@ class Database:
 
     def select_cards(self, cardset_id):
         return self.execute_query(f"SELECT CC.CardId FROM CARDSETS_CARDS CC WHERE CC.CardsetId = {cardset_id};", "Selecting competitions", True)
+
+    def select_creator(self, cardset_id):
+        return self.execute_query(f"SELECT DISTINCT CU.UserId FROM CARDSETS_USERS CU WHERE CU.CardsetId = {cardset_id};", "Selecting competitions", True)

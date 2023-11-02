@@ -165,12 +165,14 @@ class SearchQuery:
     description: str
     params: List[Parameter]
     exec_func: Callable
-    # details_func: Callable
     details_id: str
     object_name: str
 
 def get_all_cards(cardset_id):
     return list(map(lambda x: Card(*x), db.select_cards(int(cardset_id))))
+
+def get_creator(cardset_id):
+    return list(map(lambda x: Creator(*x), db.select_creator(int(cardset_id))))
 
 SEARCH_QUERIES: Dict[str, SearchQuery] = {
     'cards_from_cardset':
@@ -181,12 +183,21 @@ SEARCH_QUERIES: Dict[str, SearchQuery] = {
                     exec_func=get_all_cards,
                     details_id='id',
                     object_name='card'
-                    # details_func=None
+                    ),
+    'creator_from_cardset':
+        SearchQuery(name='creator_from_cardset',
+                    description='Select creator of cardset',
+                    params=[Parameter(name='cardset_id',
+                                      desc='CardsetId')],
+                    exec_func=get_creator,
+                    details_id='id',
+                    object_name='creator'
                     )
 }
 SEARCH_QUERIES_NAME: List[str] = list(SEARCH_QUERIES.keys())
 RESULT_HEADERS: Dict[str, List[str]] = {
-    'cards_from_cardset': ["id"]
+    'cards_from_cardset': ["id"],
+    'creator_from_cardset': ["id"],
 }
 ORDER_HEADERS = RESULT_HEADERS
 
