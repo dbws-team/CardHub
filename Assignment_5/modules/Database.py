@@ -191,3 +191,6 @@ class Database:
 
     def select_competitions(self):
         return self.execute_query("select * from COMPETITIONS", "Selecting competitions", True)
+
+    def select_cards(self, cardset_id):
+        return self.execute_query(f"SELECT CC.CardId FROM CARDSETS_CARDS CC WHERE CC.CardsetId = {cardset_id};", "Selecting competitions", True)

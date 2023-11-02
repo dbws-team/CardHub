@@ -198,6 +198,31 @@ ORDER_HEADERS = RESULT_HEADERS
 
 
 def ensure_search_field_exists(query: str, r: Request) -> Optional[Tuple[str, int]]:
+    object_name: str
+
+def get_all_cards(cardset_id):
+    return db.select_cards(int(cardset_id))
+
+SEARCH_QUERIES: Dict[str, SearchQuery] = {
+    'cards_from_cardset':
+        SearchQuery(name='cards_from_cardset',
+                    description='Select list of cards in cardset',
+                    params=[Parameter(name='cardset_id',
+                                      desc='CardsetId')],
+                    exec_func=get_all_cards,
+                    details_id='id',
+                    object_name='card'
+                    # details_func=None
+                    )
+}
+SEARCH_QUERIES_NAME: List[str] = list(SEARCH_QUERIES.keys())
+RESULT_HEADERS: Dict[str, List[str]] = {
+    'cards_from_cardset': ["cardset_id"]
+}
+ORDER_HEADERS = RESULT_HEADERS
+
+
+def ensure_search_field_exists(query: str, r: Request) -> Optional[Tuple[str, int]]:
     for param in SEARCH_QUERIES[query].params:
         if param.name not in r.form:
             return f"Can't find field {param.name} in form", 400
