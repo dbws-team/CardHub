@@ -15,8 +15,8 @@ ENTITIES_FIELDS = {"photo_card": ["url", "back_text"],
                    "cardset": [],
                    "time_competition": ["start_time", "leaderboard_id"],
                    "score_competition": ["leaderboard_id"],
-                   "score_leaderboard": ["user_id", "score", 'competition_id'],
-                   "time_leaderboard": ["user_id", "time", 'competition_id']
+                   "score_leaderboard": ["user_id", "score"],
+                   "time_leaderboard": ["user_id", "time"]
                    }
 
 ENTITIES_INSERT_FUNCTION = {'photo_card': db.create_photo_card,
@@ -30,15 +30,15 @@ ENTITIES_INSERT_FUNCTION = {'photo_card': db.create_photo_card,
                             'score_leaderboard': db.create_score_leaderboard
                             }
 
-RELATION_FIELDS = {"photo_card": ["cardset_ids"],
-                   "text_card": ["cardset_ids"],
+RELATION_FIELDS = {"photo_card": ["cardset_id"],
+                   "text_card": ["cardset_id"],
                    "player": [],
                    "creator": [],
-                   "cardset": ["creator_ids"],
-                   "time_competition": ["player_ids"],
-                   "score_competition": ["player_ids"],
-                   "score_leaderboard": ["competition_ids"],
-                   "time_leaderboard": ["competition_ids"]
+                   "cardset": ["creator_id"],
+                   "time_competition": ["player_id"],
+                   "score_competition": ["player_id"],
+                   "score_leaderboard": ["competition_id"],
+                   "time_leaderboard": ["competition_id"]
                    }
 
 
