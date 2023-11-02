@@ -60,7 +60,7 @@ def print_submitted():
 
 @app.route('/maintenance')
 def maintenance_page():
-    return render_template("maintenance.html", entities=ENTITIES)
+    return render_template("maintenance.html", entities=ENTITIES, search_queries=SEARCH_QUERIES_NAME)
 
 
 @app.route('/maintenance/photo_card')
