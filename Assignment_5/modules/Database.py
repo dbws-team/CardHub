@@ -172,13 +172,13 @@ class Database:
         self.execute_query(self.insert_competiton(leaderboard_id, 'TIME'), 'Insert Competition', False)
         self.competitions += 1
         self.execute_query(self.insert_time_competitions(self.competitions, leaderboard_id, start_time), 'Insert TimeCompetition', False)
-        self.execute_query(f"INSERT INTO USERS_COMPETITIONS (CompetitionId, UserId) VALUES ({self.competitions}, {player_id});")
+        self.execute_query(f"INSERT INTO USERS_COMPETITIONS (CompetitionId, UserId) VALUES ({self.competitions}, {player_id});", "", False)
 
     def create_score_competition(self, leaderboard_id, player_id):
         self.execute_query(self.insert_competiton(leaderboard_id, 'SCORE'), 'Insert Competition', False)
         self.competitions += 1
         self.execute_query(self.insert_score_competitions(self.competitions, leaderboard_id), 'Insert ScoreCompetition', False)
-        self.execute_query(f"INSERT INTO USERS_COMPETITIONS (CompetitionId, UserId) VALUES ({self.competitions}, {player_id});")
+        self.execute_query(f"INSERT INTO USERS_COMPETITIONS (CompetitionId, UserId) VALUES ({self.competitions}, {player_id});", "", False)
 
     def select_cardsets(self):
         return self.execute_query("select * from CARDSETS", "Selecting cardsets", True)
