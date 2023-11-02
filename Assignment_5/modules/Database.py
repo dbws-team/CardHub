@@ -160,27 +160,25 @@ class Database:
         self.cardsets += 1
         self.execute_query(f"INSERT INTO CARDSETS_USERS (CardsetId, UserId) VALUES ('{self.cardsets}', '{creator_id}');", "Add creator", False)
 
-    def create_score_leaderboard(self, competition_id, users_scores_places):
+    def create_score_leaderboard(self, competition_id):
         self.execute_query(self.insert_leaderboard(competition_id), 'Insert Leaderboard', False)
         self.leaderboards += 1
-        for user_id, score, place in users_scores_places:
-            self.execute_query(self.insert_score_leaderboards(self.leaderboards, user_id, score, place), 'Insert ScoreLeaderboard', False)
-
-    def create_time_leaderboard(self, competition_id, users_times_places):
+        
+    def create_time_leaderboard(self, competition_id):
         self.execute_query(self.insert_leaderboard(competition_id), 'Insert Leaderboard', False)
         self.leaderboards += 1
-        for user_id, time, place in users_times_places:
-            self.execute_query(self.insert_time_leaderboards(self.leaderboards, user_id, time, place), 'Insert TimeLeaderboard', False)
 
-    def create_time_competition(self, leaderboard_id, start_time):
+    def create_time_competition(self, leaderboard_id, start_time, player_id):
         self.execute_query(self.insert_competiton(leaderboard_id, 'TIME'), 'Insert Competition', False)
         self.competitions += 1
         self.execute_query(self.insert_time_competitions(self.competitions, leaderboard_id, start_time), 'Insert TimeCompetition', False)
+        self.execute_query(f"INSERT INTO USERS_COMPETITIONS (CompetitionId, UserId) VALUES ({self.competitions}, {player_id});")
 
-    def create_score_competition(self, leaderboard_id, start_time):
+    def create_score_competition(self, leaderboard_id, start_time, player_id):
         self.execute_query(self.insert_competiton(leaderboard_id, 'SCORE'), 'Insert Competition', False)
         self.competitions += 1
         self.execute_query(self.insert_time_competitions(self.competitions, leaderboard_id, start_time), 'Insert ScoreCompetition', False)
+        self.execute_query(f"INSERT INTO USERS_COMPETITIONS (CompetitionId, UserId) VALUES ({self.competitions}, {player_id});")
 
     def select_cardsets(self):
         return self.execute_query("select * from CARDSETS", "Selecting cardsets", True)
