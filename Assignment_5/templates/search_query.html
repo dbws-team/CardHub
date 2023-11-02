@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <title>Search query</title>
+</head>
+<body>
+<h1> {{ query['description'] }} </h1>
+<div class="content">
+    <form action="/maintenance/search/{{ query['name'] }}/submit" method="post">
+        {% for param in query['params'] %}
+        <label for="{{ param['name'] }}">{{ param['desc'] }}:</label>
+        <input type="text" id="{{ param['name'] }}" name="{{ param['name'] }}"><br><br>
+        {% endfor %}
+        <input type="submit" value="Submit">
+    </form>
+
+    <br><br>
+    <a class="back" href="/maintenance"> Back </a>
+</div>
+</body>
+</html>

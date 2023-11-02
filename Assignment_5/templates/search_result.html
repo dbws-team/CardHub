@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='table.css') }}">
+    <title>Search result</title>
+</head>
+<body>
+<!--<div class="res">-->
+<table class="res_table">
+    <thead>
+    <tr>
+        {% for header in headers %}
+        <th> {{ header }} </th>
+        {% endfor %}
+        <th> Details </th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for row in result %}
+        <tr>
+            {% for elem in order %}
+            <td>
+                {{ row[elem] }}
+            </td>
+            {% endfor %}
+            <td>
+                <a href="/maintenance/{{ query['object_name'] }}/{{ row[query['details_id']] }}"> Details </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<br><br>
+<a href="/maintenance"> Back </a>
+<!--</div>-->
+</body>
+</html>

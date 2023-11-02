@@ -1,0 +1,98 @@
+.search_result {
+    align-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.res_table {
+    margin-left: auto;
+    margin-right: auto;
+    /*alignment: center;*/
+    /*display: block;*/
+}
+
+.content {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.back {
+    margin-left: auto;
+    margin-right: auto;
+    align-content: center;
+    text-align: center;
+    display: block;
+}
+
+table {
+    border-collapse: collapse;
+    /*display: inline-block;*/
+
+}
+
+table, th, td {
+    border: 1px solid;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+}
+
+tr:nth-child(odd) {
+    background-color: #FFFFFF;
+}
+
+tr:nth-child(even) {
+    background-color: #CBF3F0;
+}
+
+button.accent {
+    background-color: var(--active-color);
+    outline: none;
+    border: none;
+}
+
+button.accent .internal-text {
+    color: var(--text-color-3);
+    /*margin-left: 1vh;*/
+    /*margin-right: 1vh;*/
+    font-size: 24pt;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.additional-buttons {
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    /*gap: 0.5vh;*/
+}
+
+
+a.button {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+    width: 20%;
+    height: 10%;
+
+    border-color: var(--button-outline-color);
+    border-style: solid;
+    border-width: 1px;
+
+    background-color: var(--button-fill-color);
+
+    padding: 4% 5%;
+    text-decoration: none;
+    text-rendering: auto;
+    color: initial;
+    display: inline-block;
+    text-align: center;
+    margin: 0em;
+    font-size: 32px;
+    font-size: 1vmax;
+}
