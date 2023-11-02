@@ -174,6 +174,9 @@ def get_all_cards(cardset_id):
 def get_creator(cardset_id):
     return list(map(lambda x: Creator(*x), db.select_creator(int(cardset_id))))
 
+def get_competitions(player_id):
+    return list(map(lambda x: Competition(*x), db.select_competitions_for_player(int(player_id))))
+
 SEARCH_QUERIES: Dict[str, SearchQuery] = {
     'cards_from_cardset':
         SearchQuery(name='cards_from_cardset',
@@ -192,12 +195,22 @@ SEARCH_QUERIES: Dict[str, SearchQuery] = {
                     exec_func=get_creator,
                     details_id='id',
                     object_name='creator'
-                    )
+                    ),
+    'competitions_from_player':
+        SearchQuery(name='competitions_from_player',
+                    description='Select all competitions for user',
+                    params=[Parameter(name='player_id',
+                                      desc='PlayerId')],
+                    exec_func=get_competitions,
+                    details_id='id',
+                    object_name='competitions'
+                    ),
 }
 SEARCH_QUERIES_NAME: List[str] = list(SEARCH_QUERIES.keys())
 RESULT_HEADERS: Dict[str, List[str]] = {
     'cards_from_cardset': ["id"],
     'creator_from_cardset': ["id"],
+    'competitions_from_player': ["id"],
 }
 ORDER_HEADERS = RESULT_HEADERS
 

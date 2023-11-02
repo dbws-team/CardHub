@@ -51,6 +51,10 @@ class ScoreCompetition:
     id: int
 
 @dataclass
+class Competition:
+    id: int
+
+@dataclass
 class TimeLeaderboard:
     id: int
     user_id: int
@@ -201,3 +205,6 @@ class Database:
 
     def select_creator(self, cardset_id):
         return self.execute_query(f"SELECT DISTINCT CU.UserId FROM CARDSETS_USERS CU WHERE CU.CardsetId = {cardset_id};", "Selecting competitions", True)
+
+    def select_competitions_for_player(self, player_id):
+        return self.execute_query(f"SELECT UC.CompetitionId FROM USERS_COMPETITIONS UC WHERE UC.UserId = {player_id};", "Selecting competitions", True)
