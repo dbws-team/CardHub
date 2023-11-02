@@ -22,6 +22,10 @@ class Creator:
     id: int
 
 @dataclass
+class Card:
+    id: int
+
+@dataclass
 class TextCard:
     id: int
     front_text: str

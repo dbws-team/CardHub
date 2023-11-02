@@ -169,14 +169,8 @@ class SearchQuery:
     details_id: str
     object_name: str
 
-
-class NotFoundException(Exception):
-    def __init__(self, err: str):
-        super().__init__(err)
-
-
 def get_all_cards(cardset_id):
-    return db.select_cards(int(cardset_id))
+    return list(map(lambda x: Card(*x).id, db.select_cards(int(cardset_id))))
 
 SEARCH_QUERIES: Dict[str, SearchQuery] = {
     'cards_from_cardset':
@@ -192,32 +186,7 @@ SEARCH_QUERIES: Dict[str, SearchQuery] = {
 }
 SEARCH_QUERIES_NAME: List[str] = list(SEARCH_QUERIES.keys())
 RESULT_HEADERS: Dict[str, List[str]] = {
-    'cards_from_cardset': ["cardset_id"]
-}
-ORDER_HEADERS = RESULT_HEADERS
-
-
-def ensure_search_field_exists(query: str, r: Request) -> Optional[Tuple[str, int]]:
-    object_name: str
-
-def get_all_cards(cardset_id):
-    return db.select_cards(int(cardset_id))
-
-SEARCH_QUERIES: Dict[str, SearchQuery] = {
-    'cards_from_cardset':
-        SearchQuery(name='cards_from_cardset',
-                    description='Select list of cards in cardset',
-                    params=[Parameter(name='cardset_id',
-                                      desc='CardsetId')],
-                    exec_func=get_all_cards,
-                    details_id='id',
-                    object_name='card'
-                    # details_func=None
-                    )
-}
-SEARCH_QUERIES_NAME: List[str] = list(SEARCH_QUERIES.keys())
-RESULT_HEADERS: Dict[str, List[str]] = {
-    'cards_from_cardset': ["cardset_id"]
+    'cards_from_cardset': ["card_id"]
 }
 ORDER_HEADERS = RESULT_HEADERS
 
@@ -251,8 +220,6 @@ def show_search_result(query):
                                order=ORDER_HEADERS[query],
                                result=SEARCH_QUERIES[query].exec_func(**request.form))
     except SqlException as e:
-        return render_template("insert_result.html", result=e)
-    except NotFoundException as e:
         return render_template("insert_result.html", result=e)
 
 
