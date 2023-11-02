@@ -15,8 +15,8 @@ ENTITIES_FIELDS = {"photo_card": ["url", "back_text"],
                    "cardset": [],
                    "time_competition": ["start_time", "leaderboard_id"],
                    "score_competition": ["leaderboard_id"],
-                   "score_leaderboard": ["user_id", "score"],
-                   "time_leaderboard": ["user_id", "time"]
+                   "score_leaderboard": [],
+                   "time_leaderboard": []
                    }
 
 ENTITIES_INSERT_FUNCTION = {'photo_card': db.create_photo_card,
@@ -65,7 +65,7 @@ def maintenance_page():
 
 @app.route('/maintenance/photo_card')
 def get_photo_card_input():
-    cardsets = {'cardset_ids': list(map(lambda x: Cardset(x).id, db.select_cardsets()))}
+    cardsets = {'cardset_id': list(map(lambda x: Cardset(x).id, db.select_cardsets()))}
     return render_template("entity.html", fields=ENTITIES_FIELDS['photo_card'],
                            entity_name='photo_card',
                            select_fields=RELATION_FIELDS['photo_card'],
@@ -73,7 +73,7 @@ def get_photo_card_input():
 
 @app.route('/maintenance/text_card')
 def get_text_card_input():
-    cardsets = {'cardset_ids': list(map(lambda x: Cardset(x).id, db.select_cardsets()))}
+    cardsets = {'cardset_id': list(map(lambda x: Cardset(x).id, db.select_cardsets()))}
     return render_template("entity.html", fields=ENTITIES_FIELDS['text_card'],
                            entity_name='text_card',
                            select_fields=RELATION_FIELDS['text_card'],
@@ -90,7 +90,7 @@ def get_creator_input():
 @app.route('/maintenance/cardset')
 def get_cardset_input():
     print(db.select_creators())
-    creators = {'creator_ids': list(map(lambda x: Creator(*x).id, db.select_creators()))}
+    creators = {'creator_id': list(map(lambda x: Creator(*x).id, db.select_creators()))}
     return render_template("entity.html", fields=ENTITIES_FIELDS['cardset'],
                            entity_name='cardset',
                            select_fields=RELATION_FIELDS['cardset'],
@@ -98,28 +98,28 @@ def get_cardset_input():
 
 @app.route('/maintenance/time_competition')
 def get_time_competition_input():
-    players = {'player_ids': list(map(lambda x: Player(*x).id, db.select_players()))}
+    players = {'player_id': list(map(lambda x: Player(*x).id, db.select_players()))}
     return render_template("entity.html", fields=ENTITIES_FIELDS['time_competition'], entity_name='time_competition',
                            select_fields=RELATION_FIELDS['time_competition'],
                            existed_relations=players)
 
 @app.route('/maintenance/score_competition')
 def get_score_competition_input():
-    players = {'player_ids': list(map(lambda x: Player(*x).id, db.select_players()))}
+    players = {'player_id': list(map(lambda x: Player(*x).id, db.select_players()))}
     return render_template("entity.html", fields=ENTITIES_FIELDS['score_competition'], entity_name='score_competition',
                            select_fields=RELATION_FIELDS['score_competition'],
                            existed_relations=players)
 
 @app.route('/maintenance/score_leaderboard')
 def get_score_leaderboard_input():
-    competitions = {'competition_ids': list(map(lambda x: x[0], db.select_competitions()))}
+    competitions = {'competition_id': list(map(lambda x: x[0], db.select_competitions()))}
     return render_template("entity.html", fields=ENTITIES_FIELDS['score_leaderboard'], entity_name='score_leaderboard',
                            select_fields=RELATION_FIELDS['score_leaderboard'],
                            existed_relations=competitions)
 
 @app.route('/maintenance/time_leaderboard')
 def get_time_leaderboard_input():
-    competitions = {'competition_ids': list(map(lambda x: x[0], db.select_competitions()))}
+    competitions = {'competition_id': list(map(lambda x: x[0], db.select_competitions()))}
     return render_template("entity.html", fields=ENTITIES_FIELDS['time_leaderboard'], entity_name='time_leaderboard',
                            select_fields=RELATION_FIELDS['time_leaderboard'],
                            existed_relations=competitions)

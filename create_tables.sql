@@ -25,14 +25,14 @@ CREATE TABLE CARDS (
 );
 
 CREATE TABLE PHOTO_CARDS (
-   	CardId INT  AUTO_INCREMENT,
+   	CardId INT,
 	FrontImage TEXT,
 	BackText TEXT,
 	FOREIGN KEY(CardId) REFERENCES CARDS(CardId)
 );
 
 CREATE TABLE TEXT_CARDS (
-   	CardId INT  AUTO_INCREMENT,
+   	CardId INT,
 	FrontText TEXT,
 	BackText TEXT,
 	FOREIGN KEY(CardId) REFERENCES CARDS(CardId)
@@ -45,7 +45,7 @@ CREATE TABLE LEADERBOARDS (
 );
 
 CREATE TABLE COMPETITIONS (
-	CompetitionId INT,
+	CompetitionId INT AUTO_INCREMENT,
 	LeaderboardId INT,
 	CompetitionType TEXT,
 	PRIMARY KEY(CompetitionId)
