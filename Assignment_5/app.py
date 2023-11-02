@@ -186,7 +186,7 @@ SEARCH_QUERIES: Dict[str, SearchQuery] = {
 }
 SEARCH_QUERIES_NAME: List[str] = list(SEARCH_QUERIES.keys())
 RESULT_HEADERS: Dict[str, List[str]] = {
-    'cards_from_cardset': ["card_id"]
+    'cards_from_cardset': ["id"]
 }
 ORDER_HEADERS = RESULT_HEADERS
 
