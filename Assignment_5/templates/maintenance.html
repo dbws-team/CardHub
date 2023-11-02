@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/styles.css">
+    <title>Maintenance Page</title>
+</head>
+<body>
+
+<h2>Please select name of entity you want to input(all relations creating with entity)</h2>
+<select name="entity" id="entity">
+    {% for entity in entities %}
+    <option value="{{ entity }}">{{ entity }}</option>
+    {% endfor %}
+</select>
+
+<a class="input_entity" href="maintenance/cardset">Input Entity</a>
+
+<script>
+    var id;
+    $('#entity').on('change', function () {
+        id = $(this).val();
+        const new_href = "maintenance/" + id;
+        $('.input_entity').attr('href', new_href);
+    });
+</script>
+
+</body>
+</html>
