@@ -17,12 +17,26 @@
 
 <a class="input_entity" href="maintenance/cardset">Input Entity</a>
 
+<h2>Or select name of search query</h2>
+<select name="search" id="search">
+    {% for search in search_queries %}
+    <option value="{{ search }}">{{ search }}</option>
+    {% endfor %}
+</select>
+<a class="input_search" href="maintenance/search/driver_stats">Search</a>
+
 <script>
     var id;
     $('#entity').on('change', function () {
         id = $(this).val();
         const new_href = "maintenance/" + id;
         $('.input_entity').attr('href', new_href);
+    });
+    var id2;
+    $('#search').on('change', function () {
+        id2 = $(this).val();
+        const new_href = "maintenance/search/" + id2
+        $('.input_search').attr('href', new_href);
     });
 </script>
 
