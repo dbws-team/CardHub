@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template, request, Request
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Callable, Dict
 from modules.Database import *
 
 app = Flask(__name__)
@@ -152,3 +152,88 @@ def submit(entity):
         return render_template('result.html', result=f'Failed: {e}')
     else:
         return render_template('result.html', result='Success')
+
+@dataclass
+class Parameter:
+    name: str
+    desc: str
+
+
+@dataclass
+class SearchQuery:
+    name: str
+    description: str
+    params: List[Parameter]
+    exec_func: Callable
+    # details_func: Callable
+    details_id: str
+    object_name: str
+
+
+class NotFoundException(Exception):
+    def __init__(self, err: str):
+        super().__init__(err)
+
+
+def get_all_cards(cardset_id):
+    return db.select_cards(int(cardset_id))
+
+SEARCH_QUERIES: Dict[str, SearchQuery] = {
+    'cards_from_cardset':
+        SearchQuery(name='cards_from_cardset',
+                    description='Select list of cards in cardset',
+                    params=[Parameter(name='cardset_id',
+                                      desc='CardsetId')],
+                    exec_func=get_all_cards,
+                    details_id='id',
+                    object_name='card'
+                    # details_func=None
+                    )
+}
+SEARCH_QUERIES_NAME: List[str] = list(SEARCH_QUERIES.keys())
+RESULT_HEADERS: Dict[str, List[str]] = {
+    'cards_from_cardset': ["cardset_id"]
+}
+ORDER_HEADERS = RESULT_HEADERS
+
+
+def ensure_search_field_exists(query: str, r: Request) -> Optional[Tuple[str, int]]:
+    for param in SEARCH_QUERIES[query].params:
+        if param.name not in r.form:
+            return f"Can't find field {param.name} in form", 400
+    if len(SEARCH_QUERIES[query].params) != len(list(r.form.keys())):
+        return "Not only fields", 400
+    return None
+
+
+def get_rows(name: str, result):
+    return [[row.__dict__[param] for param in ORDER_HEADERS[name]] for row in result]
+
+
+@app.route('/maintenance/search/<query>/submit', methods=['POST'])
+def show_search_result(query):
+    if query not in SEARCH_QUERIES_NAME:
+        return 'Unknown query', 400
+
+    res = ensure_search_field_exists(query, request)
+    if res is not None:
+        return res
+    try:
+        print(SEARCH_QUERIES[query].exec_func(**request.form))
+        return render_template("search_result.html",
+                               headers=RESULT_HEADERS[query],
+                               query=SEARCH_QUERIES[query],
+                               order=ORDER_HEADERS[query],
+                               result=SEARCH_QUERIES[query].exec_func(**request.form))
+    except SqlException as e:
+        return render_template("insert_result.html", result=e)
+    except NotFoundException as e:
+        return render_template("insert_result.html", result=e)
+
+
+@app.route('/maintenance/search/<query>')
+def search_query(query):
+    if query not in SEARCH_QUERIES_NAME:
+        return 'Unknown query', 400
+
+    return render_template("search_query.html", query=SEARCH_QUERIES[query])
