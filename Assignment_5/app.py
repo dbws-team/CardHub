@@ -65,7 +65,7 @@ def maintenance_page():
 
 @app.route('/maintenance/photo_card')
 def get_photo_card_input():
-    cardsets = {'cardset_id': list(map(lambda x: Cardset(x).id, db.select_cardsets()))}
+    cardsets = {'cardset_id': list(map(lambda x: Cardset(*x).id, db.select_cardsets()))}
     return render_template("entity.html", fields=ENTITIES_FIELDS['photo_card'],
                            entity_name='photo_card',
                            select_fields=RELATION_FIELDS['photo_card'],
@@ -73,7 +73,7 @@ def get_photo_card_input():
 
 @app.route('/maintenance/text_card')
 def get_text_card_input():
-    cardsets = {'cardset_id': list(map(lambda x: Cardset(x).id, db.select_cardsets()))}
+    cardsets = {'cardset_id': list(map(lambda x: Cardset(*x).id, db.select_cardsets()))}
     return render_template("entity.html", fields=ENTITIES_FIELDS['text_card'],
                            entity_name='text_card',
                            select_fields=RELATION_FIELDS['text_card'],
