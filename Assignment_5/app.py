@@ -177,8 +177,8 @@ def get_creator(cardset_id):
 def get_competitions(player_id):
     return list(map(lambda x: Competition(*x), db.select_competitions_for_player(int(player_id))))
 
-def get_users_from_all_competitions():
-    return list(map(lambda x: UserAndCompetitions(*x), db.select_users_from_all_competitions()))
+def get_users_and_competitions():
+    return list(map(lambda x: UserAndCompetitions(*x), db.select_users_and_competitions()))
 
 SEARCH_QUERIES: Dict[str, SearchQuery] = {
     'cards_from_cardset':
@@ -208,11 +208,11 @@ SEARCH_QUERIES: Dict[str, SearchQuery] = {
                     details_id='id',
                     object_name='competitions'
                     ),
-    'users_from_all_competitions':
-        SearchQuery(name='users_from_all_competitions',
-                    description='Find the users who have participated in all competitions.',
+    'users_and_competitions':
+        SearchQuery(name='users_and_competitions',
+                    description='Find number of competitions for every user',
                     params=[],
-                    exec_func=get_users_from_all_competitions,
+                    exec_func=get_users_and_competitions,
                     details_id='id',
                     object_name='users'
                     ),
