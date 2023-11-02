@@ -1,12 +1,10 @@
 import os
-import random
-
 from flask import Flask, render_template, request, Request
 from typing import List, Optional, Tuple
-# from modules.Database import SqlException, Database
+from modules.Database import SqlException, Database
 
 app = Flask(__name__)
-# db = Database(host=os.environ.get('DBWS_HOST'), user=os.environ.get('DBWS_USER'), password=os.environ.get('DBWS_PASSWORD'))
+db = Database(host=os.environ.get('DBWS_HOST'), user=os.environ.get('DBWS_USER'), password=os.environ.get('DBWS_PASSWORD'))
 
 ENTITIES = ["photo_card", "text_card", "player", "creator", "cardset", "time_competition", "score_competition", "score_leaderboard", "time_leaderboard"]
 
@@ -15,24 +13,33 @@ ENTITIES_FIELDS = {"photo_card": ["url", "back_text"],
                    "player": ["username", "email", "password", "date_joined", "league"],
                    "creator": ["username", "email", "password", "date_joined"],
                    "cardset": ["name"],
-                   "time_competition": ["start_time"],
-                   "score_competition": [],
-                   "score_leaderboard": ["leaderboard_id", "user_id", "score"],
-                   "time_leaderboard": ["leaderboard_id", "user_id", "time"]
+                   "time_competition": ["start_time", "leaderboard_id"],
+                   "score_competition": ["leaderboard_id"],
+                   "score_leaderboard": ["user_id", "score", 'competition_id'],
+                   "time_leaderboard": ["user_id", "time", 'competition_id']
                    }
 
-# ENTITIES_INSERT_FUNCTION = {'photo_card': db.insert_photo_card,
-#                             'text_card': db.insert_text_card,
-#                             'player': db.insert_player,
-#                             'creator': db.insert_creator,
-#                             'cardset': db.insert_cardset,
-#                             'time_competition': db.insert_time_competition,
-#                             'score_competition': db.insert_score_competition,
-#                             'time_leaderboard': db.insert_time_leaderboard,
-#                             'score_leaderboard': db.insert_score_leaderboard
-#                             }
+ENTITIES_INSERT_FUNCTION = {'photo_card': db.create_photo_card,
+                            'text_card': db.create_text_card,
+                            'player': db.create_player,
+                            'creator': db.create_creator,
+                            'cardset': db.create_cardset,
+                            'time_competition': db.create_time_competition,
+                            'score_competition': db.create_score_competition,
+                            'time_leaderboard': db.create_time_leaderboard,
+                            'score_leaderboard': db.create_score_leaderboard
+                            }
 
-RELATION_FIELDS = {"photo_card": ["cardsets_name"], "text_card": ["cardsets_name"]}
+RELATION_FIELDS = {"photo_card": ["cardset_ids"],
+                   "text_card": ["cardset_ids"],
+                   "player": [],
+                   "creator": [],
+                   "cardset": ["creator_ids"],
+                   "time_competition": ["player_ids"],
+                   "score_competition": ["player_ids"],
+                   "score_leaderboard": ["competition_ids"],
+                   "time_leaderboard": ["competition_ids"]
+                   }
 
 
 @app.route('/')
@@ -58,7 +65,7 @@ def maintenance_page():
 
 @app.route('/maintenance/photo_card')
 def get_photo_card_input():
-    cardsets = {'cardset_name': []} # list(map(lambda x: x.name, db.select_cardsets()))}
+    cardsets = {'cardset_ids': list(map(lambda x: x.id, db.select_cardsets()))}
     return render_template("entity.html", fields=ENTITIES_FIELDS['photo_card'],
                            entity_name='photo_card',
                            select_fields=RELATION_FIELDS['photo_card'],
@@ -66,7 +73,7 @@ def get_photo_card_input():
 
 @app.route('/maintenance/text_card')
 def get_text_card_input():
-    cardsets = {'cardset_name': []} # list(map(lambda x: x.name, db.select_cardsets()))}
+    cardsets = {'cardset_ids': list(map(lambda x: x.id, db.select_cardsets()))}
     return render_template("entity.html", fields=ENTITIES_FIELDS['text_card'],
                            entity_name='text_card',
                            select_fields=RELATION_FIELDS['text_card'],
@@ -82,27 +89,42 @@ def get_creator_input():
 
 @app.route('/maintenance/cardset')
 def get_cardset_input():
-    return render_template("entity.html", fields=ENTITIES_FIELDS['cardset'], entity_name='cardset')
+    creators = {'creator_ids': list(map(lambda x: x.id, db.select_creators()))}
+    return render_template("entity.html", fields=ENTITIES_FIELDS['cardset'],
+                           entity_name='cardset',
+                           select_fields=RELATION_FIELDS['cardset'],
+                           existed_relations=creators)
 
 @app.route('/maintenance/time_competition')
 def get_time_competition_input():
-    return render_template("entity.html", fields=ENTITIES_FIELDS['time_competition'], entity_name='time_competition')
+    players = {'player_ids': list(map(lambda x: x.id, db.select_players()))}
+    return render_template("entity.html", fields=ENTITIES_FIELDS['time_competition'], entity_name='time_competition',
+                           select_fields=RELATION_FIELDS['time_competition'],
+                           existed_relations=players)
 
 @app.route('/maintenance/score_competition')
 def get_score_competition_input():
-    return render_template("entity.html", fields=ENTITIES_FIELDS['score_competition'], entity_name='score_competition')
+    players = {'player_ids': list(map(lambda x: x.id, db.select_players()))}
+    return render_template("entity.html", fields=ENTITIES_FIELDS['score_competition'], entity_name='score_competition',
+                           select_fields=RELATION_FIELDS['score_competition'],
+                           existed_relations=players)
 
 @app.route('/maintenance/score_leaderboard')
 def get_score_leaderboard_input():
-    return render_template("entity.html", fields=ENTITIES_FIELDS['score_leaderboard'], entity_name='score_leaderboard')
+    competitions = {'competition_ids': list(map(lambda x: x.id, db.select_competitions()))}
+    return render_template("entity.html", fields=ENTITIES_FIELDS['score_leaderboard'], entity_name='score_leaderboard',
+                           select_fields=RELATION_FIELDS['score_leaderboard'],
+                           existed_relations=competitions)
 
 @app.route('/maintenance/time_leaderboard')
 def get_time_leaderboard_input():
-    return render_template("entity.html", fields=ENTITIES_FIELDS['time_leaderboard'], entity_name='time_leaderboard')
+    competitions = {'competition_ids': list(map(lambda x: x.id, db.select_competitions()))}
+    return render_template("entity.html", fields=ENTITIES_FIELDS['time_leaderboard'], entity_name='time_leaderboard',
+                           select_fields=RELATION_FIELDS['time_leaderboard'],
+                           existed_relations=competitions)
 
 
 def ensure_field_exists(entity: str, r: Request) -> Optional[Tuple[str, int]]:
-    print(entity)
     for field in ENTITIES_FIELDS[entity]:
         if field not in r.form:
             return f"Can't find field {field} in form", 400
@@ -124,9 +146,8 @@ def submit(entity):
         return verify_result
 
     try:
-        assert(random.choice([1, 2, 3, 4, 5]) != 1)
-        # ENTITIES_INSERT_FUNCTION[entity](**request.form)
-    except AssertionError as e:
+        ENTITIES_INSERT_FUNCTION[entity](**request.form)
+    except SqlException as e:
         return render_template('result.html', result=f'Failed: {e}')
     else:
         return render_template('result.html', result='Success')
