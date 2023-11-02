@@ -170,7 +170,7 @@ class SearchQuery:
     object_name: str
 
 def get_all_cards(cardset_id):
-    return list(map(lambda x: Card(*x).id, db.select_cards(int(cardset_id))))
+    return list(map(lambda x: Card(*x), db.select_cards(int(cardset_id))))
 
 SEARCH_QUERIES: Dict[str, SearchQuery] = {
     'cards_from_cardset':
