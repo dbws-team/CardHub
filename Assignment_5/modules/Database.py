@@ -13,6 +13,12 @@ class SqlException(Exception):
         self.context = context
 
 @dataclass
+class UserAndCompetitions:
+    id: int
+    username: str
+    number: int
+
+@dataclass
 class Player:
     id: int
     league: str
@@ -208,3 +214,6 @@ class Database:
 
     def select_competitions_for_player(self, player_id):
         return self.execute_query(f"SELECT UC.CompetitionId FROM USERS_COMPETITIONS UC WHERE UC.UserId = {player_id};", "Selecting competitions", True)
+
+    def select_users_from_all_competitions(self):
+        return self.execute_query(f"SELECT U.UserId, U.Username, COUNT(UC.CompetitionId) AS NumberOfCompetitions FROM USERS U LEFT JOIN USERS_COMPETITIONS UC ON U.UserId = UC.UserId GROUP BY U.UserId, U.Username;", "Selecting competitions", True)

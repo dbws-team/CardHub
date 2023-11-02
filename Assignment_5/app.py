@@ -177,6 +177,9 @@ def get_creator(cardset_id):
 def get_competitions(player_id):
     return list(map(lambda x: Competition(*x), db.select_competitions_for_player(int(player_id))))
 
+def get_users_from_all_competitions():
+    return list(map(lambda x: UserAndCompetitions(*x), db.select_users_from_all_competitions()))
+
 SEARCH_QUERIES: Dict[str, SearchQuery] = {
     'cards_from_cardset':
         SearchQuery(name='cards_from_cardset',
@@ -205,14 +208,28 @@ SEARCH_QUERIES: Dict[str, SearchQuery] = {
                     details_id='id',
                     object_name='competitions'
                     ),
+    'users_from_all_competitions':
+        SearchQuery(name='users_from_all_competitions',
+                    description='Find the users who have participated in all competitions.',
+                    params=[],
+                    exec_func=get_users_from_all_competitions,
+                    details_id='id',
+                    object_name='users'
+                    ),
 }
 SEARCH_QUERIES_NAME: List[str] = list(SEARCH_QUERIES.keys())
-RESULT_HEADERS: Dict[str, List[str]] = {
+ORDER_HEADERS: Dict[str, List[str]] = {
     'cards_from_cardset': ["id"],
     'creator_from_cardset': ["id"],
     'competitions_from_player': ["id"],
+    'users_from_all_competitions': ["id", "username", "number"]
 }
-ORDER_HEADERS = RESULT_HEADERS
+RESULT_HEADERS = {
+    'cards_from_cardset': ["card id"],
+    'creator_from_cardset': ["user id"],
+    'competitions_from_player': ["competition id"],
+    'users_from_all_competitions': ["user id", "username", "number of competitions"]
+}
 
 
 def ensure_search_field_exists(query: str, r: Request) -> Optional[Tuple[str, int]]:
